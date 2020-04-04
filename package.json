@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "ajax-request": "^1.2.3",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
+    "jquery": "^3.4.1",
+    "jsonfile": "^6.0.1",
     "moment": "^2.24.0",
     "node-spotify-api": "^1.1.1"
   },
