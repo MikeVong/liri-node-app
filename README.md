@@ -1,11 +1,11 @@
 # liri-node-app# 
 LIRI Bot
-
-![](sc/concert-this.JPG)
 ### command line : node liri.js concert-this alan walker
+![](sc/concert-this.JPG)
 
-![](sc/spotify-this-song.JPG)
 ### command line : node liri.js spotify-this-song alan walker
+![](sc/spotify-this-song.JPG)
+
 
 ### Overview
 
