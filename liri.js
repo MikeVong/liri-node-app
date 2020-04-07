@@ -3,25 +3,41 @@ var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var axios = require('axios');
+var fs = require('fs');
 var moment = require('moment');
 moment().format();
 
+var option = process.argv[2];
+var firstEntry = process.argv.slice(3).join(" ");
 
 
-
-if (process.argv[4] === undefined)
-{
-	var firstEntry = process.argv[3];
-}
-else
-{
-	var firstEntry = process.argv[3] + process.argv[4];
-}
-
-
-
-switch (process.argv[2])
+function run(option,firstEntry)
 	{
+	switch(option)
+		{
+			case "concert-this":
+				concerts();	
+			break;
+			case "spotify-this-song":
+				spot();
+			break;
+			case "movie-this":
+				movie();
+			break;
+			case "do-what-it-says":
+				random(firstEntry);
+			break;
+		default:
+			console.log("Please try again.");
+			break;
+		}
+	}
+
+run(option,firstEntry);
+
+
+
+function concerts()
 /* 		* `concert-this` node liri.js concert-this <artist/band name here>
 			* Name of the venue
      		* Venue location
@@ -29,36 +45,36 @@ switch (process.argv[2])
 
 		ex: https://rest.bandsintown.com/artists/celine+dion/events?app_id=codingbootcamp
 */
-	case "concert-this":
-
-
-		var queryURL = "https://rest.bandsintown.com/artists/"+ firstEntry +"/events?app_id=codingbootcamp";
+	{
+	var queryURL = "https://rest.bandsintown.com/artists/"+ firstEntry +"/events?app_id=codingbootcamp";
 		
-		// Make a request for a user with a given ID
-		axios.get(queryURL)
-		.then(function (response) {
-			// handle success
-			for(var i = 0; i<response.data.length; i++)
-			{
-			console.log("==============================");
-			console.log("Name of the Venue: " + response.data[i].venue.name);
-			console.log("==============================");
-			console.log("Venue location: " + response.data[i].venue.country + ", " + response.data[i].venue.city);
-			console.log("==============================");
-			var dTime = moment(response.data[i].datetime).format("MM/DD/YYYY")
-			console.log("Date of the Event: " + dTime);
-			}
-		})
-		.catch(function (error) {
-			// handle error
-			console.log(error);
-		})
-		.then(function () {
-			// always executed
-		});
-		
-    	
-	break;
+	// Make a request for a user with a given ID
+	axios.get(queryURL)
+	.then(function (response) {
+		// handle success
+		for(var i = 0; i<5; i++)
+		{
+		console.log("");
+		console.log("Name of the Venue: " + response.data[i].venue.name);
+
+		console.log("Venue location: " + response.data[i].venue.country + ", " + response.data[i].venue.city);
+
+		var dTime = moment(response.data[i].datetime).format("MM/DD/YYYY")
+		console.log("Date of the Event: " + dTime);
+		console.log("+++++++++++++++++++++++++++++++");
+
+		}
+	})
+	.catch(function (error) {
+		// handle error
+		console.log(error);
+	})
+	.then(function () {
+		// always executed
+	});
+	}
+
+function spot()
 /*		* `spotify-this-song` node liri.js spotify-this-song '<song name here>'
 			* Artist(s)
      		* The song's name
@@ -66,7 +82,12 @@ switch (process.argv[2])
      		* The album that the song is from
 
 */
-	case "spotify-this-song":
+	{
+		if(firstEntry === undefined)
+		{
+			firstEntry = "Ace of Base The Sign";
+		}
+
 		spotify.search({ type: 'track', query: firstEntry , limit: 1 }, function(err, data) {
 			if (err) {
 			  return console.log('Error occurred: ' + err);
@@ -81,7 +102,9 @@ switch (process.argv[2])
 		  console.log("========================================");
 		  console.log("The album name is: " + data.tracks.items[0].name); 
 		  });
-	break;
+	}
+
+function movie()
 /*		* `movie-this` node liri.js movie-this '<movie name here>'
 			* Title of the movie.
        		* Year the movie came out.
@@ -92,13 +115,18 @@ switch (process.argv[2])
        		* Plot of the movie.
 			* Actors in the movie.
 */
-	case "movie-this":
+	{
+		if(firstEntry === undefined)
+		{
+			var firstEntry = "Mr. Nobody";
+		}
+		
 		var queryURL = "http://www.omdbapi.com/?t=" + firstEntry + "&y=&plot=short&apikey=trilogy";
 		// Make a request for a user with a given ID
 		axios.get(queryURL)
 		.then(function (response) {
 			// handle success
-
+			console.log(response);
 			console.log("=============================");
 			console.log("Title of the movie: " + response.data.Title);
 			console.log("=============================");
@@ -125,18 +153,26 @@ switch (process.argv[2])
 		.then(function () {
 			// always executed
 		});
-	break;
+	}
+function random()
 /*		* `do-what-it-says` node liri.js do-what-it-says
 			* It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
     		* Edit the text in random.txt to test out the feature for movie-this and concert-this.
 */
-	case "do-what-it-says":
+	{
+	fs.readFile("random.txt", "utf8", function (error, data) 
+		{
+		if (error) {
+		return console.log(error);
+		}
+		// CATCH DATA AND USE THE .SPLIT() METHOD TO SEPARATE OBJECTS WITHIN OUR NEW ARRAY
+		var readData = data.split(",");
 
-	break;
-	};
-
-
-
- 
-  
+		// TAKE OBJECTS FROM RANDOM.TXT TO PASS AS PARAMETERS
+		option = readData[0];
+		firstEntry = readData[1];
+			// CALL OUR FUNCTION WITH OUR NEW PARAMETERS...
+		run(option,firstEntry);
+		});
+	}
 
