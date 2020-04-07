@@ -6,6 +6,19 @@ LIRI Bot
 ### command line : node liri.js spotify-this-song alan walker
 ![](sc/spotify-this-song.JPG)
 
+### command line : node liri.js spotify-this-song
+![](sc/no-entry-spotify-this-song.JPG)
+
+### command line : node liri.js movie-this die hard
+![](sc/movie-this.JPG)
+
+### command line : node liri.js movie-this
+![](sc/no-entry-movie-this.JPG)
+
+### command line : node liri.js do-what-it-says
+![](sc/do-what-it-says.JPG)
+
+
 
 ### Overview
 
