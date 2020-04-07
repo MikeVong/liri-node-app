@@ -46,6 +46,7 @@ function concerts()
 		ex: https://rest.bandsintown.com/artists/celine+dion/events?app_id=codingbootcamp
 */
 	{
+	
 	var queryURL = "https://rest.bandsintown.com/artists/"+ firstEntry +"/events?app_id=codingbootcamp";
 		
 	// Make a request for a user with a given ID
@@ -67,7 +68,7 @@ function concerts()
 	})
 	.catch(function (error) {
 		// handle error
-		console.log(error);
+		console.log("Please enter an artist name");
 	})
 	.then(function () {
 		// always executed
@@ -83,7 +84,7 @@ function spot()
 
 */
 	{
-		if(firstEntry === undefined)
+		if(firstEntry == false)
 		{
 			firstEntry = "Ace of Base The Sign";
 		}
@@ -116,9 +117,9 @@ function movie()
 			* Actors in the movie.
 */
 	{
-		if(firstEntry === undefined)
+		if(firstEntry == false)
 		{
-			var firstEntry = "Mr. Nobody";
+			firstEntry = "Mr. Nobody";
 		}
 		
 		var queryURL = "http://www.omdbapi.com/?t=" + firstEntry + "&y=&plot=short&apikey=trilogy";
@@ -126,7 +127,6 @@ function movie()
 		axios.get(queryURL)
 		.then(function (response) {
 			// handle success
-			console.log(response);
 			console.log("=============================");
 			console.log("Title of the movie: " + response.data.Title);
 			console.log("=============================");
